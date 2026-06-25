@@ -15,7 +15,10 @@ public function store(Request $r) {
         Category::create($r->only('name', 'description'));
         return redirect()->route('admin.categories.index')->with('success', 'Category created.');
     }
-    public function edit(Category $cat) { return view('admin.categories.form', ['category' => $cat]); }
+    public function edit($id) {
+        $category = Category::findOrFail($id);
+        return view('admin.categories.form', ['category' => $category]);
+    }
     public function update(Request $r, Category $cat) {
         $r->validate(['name' => 'required|unique:categories,name,'.$cat->id, 'description' => 'nullable']);
         $cat->update($r->only('name', 'description'));

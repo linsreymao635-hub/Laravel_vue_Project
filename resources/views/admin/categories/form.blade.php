@@ -10,54 +10,33 @@
             {{ $category->exists ? 'Edit Category' : 'Create New Category' }}
         </h2>
 
-        <form method="POST" action="{{ $category->exists ? route('admin.categories.update', $category) : route('admin.categories.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ $category->exists ? route('admin.categories.update', $category) : route('admin.categories.store') }}">
             @csrf
             @if($category->exists)
                 @method('PUT')
             @endif
 
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-3" for="name">Category Name</label>
-                <input class="form-control"
-                       id="name" type="text" name="name" value="{{ old('name', $category->name) }}" required placeholder="Enter category name">
-                @error('name')
-                    <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
-                @enderror
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2" for="name">Category Name</label>
+                    <input class="form-control w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition"
+                           id="name" type="text" name="name" value="{{ old('name', $category->name) }}" required placeholder="Enter category name">
+                    @error('name')
+                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2" for="description">Description</label>
+                    <textarea class="form-control w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition"
+                              id="description" name="description" rows="4" placeholder="Enter category description">{{ old('description', $category->description) }}</textarea>
+                    @error('description')
+                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-3" for="description">Description</label>
-                <textarea class="form-control"
-                          id="description" name="description" rows="4" placeholder="Enter category description">{{ old('description', $category->description) }}</textarea>
-                @error('description')
-                    <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-3" for="image">Category Image (Optional)</label>
-                <input class="form-control"
-                       id="image" type="file" name="image" accept="image/*">
-                <p class="text-sm text-gray-500 mt-2">Upload JPG, PNG, or WebP (max 2MB). Leave empty to keep existing image.</p>
-                @error('image')
-                    <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
-                @enderror
-                @if($category->image_url)
-                    <div class="mt-4">
-                        <img src="{{ $category->image_url }}" alt="{{ $category->name }}" class="h-24 w-24 object-cover rounded-lg shadow">
-                        <p class="text-sm text-gray-500 mt-2">Current image - upload new to replace</p>
-                    </div>
-                @else
-                    <div class="mt-4">
-                        <div class="h-24 w-24 rounded-lg bg-gray-200 flex items-center justify-center">
-                            <i class="fas fa-image text-gray-400 text-2xl"></i>
-                        </div>
-                        <p class="text-sm text-gray-500 mt-2">No image uploaded</p>
-                    </div>
-                @endif
-            </div>
-
-            <div class="flex items-center gap-4">
+            <div class="flex items-center justify-end gap-4 mt-8 pt-6 border-t border-gray-200">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-{{ $category->exists ? 'save' : 'plus' }}"></i>
                     {{ $category->exists ? 'Update Category' : 'Create Category' }}
